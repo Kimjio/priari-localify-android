@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+
+    <queries>
+        <package android:name="jp.co.cygames.umamusume" />
+        <package android:name="com.kakaogames.umamusume" />
+        <package android:name="com.komoe.kmumamusumegp" />
+        <package android:name="com.komoe.kmumamusumemc" />
+        <!-- TODO Package by region -->
+    </queries>
+
+    <application
+        android:name=".app.SettingsApplication"
+        android:allowBackup="true"
+        android:enableOnBackInvokedCallback="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.UmamusumeLocalifyAndroid"
+        tools:targetApi="tiramisu">
+        <property
+            android:name="android.window.PROPERTY_ACTIVITY_EMBEDDING_SPLITS_ENABLED"
+            android:value="true" />
+
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.ManageTranslateActivity"
+            android:exported="false"
+            android:label="@string/manage_translate" />
+        <activity
+            android:name=".activity.JsonViewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.JsonEditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.MsgPackListActivity"
+            android:label="@string/pref_msgpack_history"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:exported="false" />
+    </application>
+
+</manifest>

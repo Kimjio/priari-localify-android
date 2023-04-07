@@ -1,0 +1,68 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.kimjio.umamusumelocalify.settings'
+    compileSdk rootProject.ext.targetSdkVersion
+    ndkVersion '25.0.8775105'
+
+    defaultConfig {
+        applicationId "com.kimjio.umamusumelocalify.settings"
+        minSdk rootProject.ext.minSdkVersion
+        targetSdk rootProject.ext.targetSdkVersion
+        versionCode 11
+        versionName "1.5.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        debug {
+            pseudoLocalesEnabled true
+        }
+        release {
+            pseudoLocalesEnabled true
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildFeatures {
+        buildConfig true
+        dataBinding true
+    }
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+            version "3.22.1"
+        }
+    }
+}
+
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
+    implementation 'androidx.appcompat:appcompat:1.7.0-alpha01'
+    implementation 'com.google.android.material:material:1.9.0-beta01'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.preference:preference:1.2.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'androidx.window:window:1.0.0'
+    implementation 'it.xabaras.android:recyclerview-swipedecorator:1.4'
+    implementation 'org.msgpack:msgpack-core:0.9.3'
+    implementation 'org.msgpack:jackson-dataformat-msgpack:0.9.3'
+    implementation ('com.blacksquircle.ui:editorkit:2.5.0') {
+        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
+    }
+    implementation ('com.blacksquircle.ui:language-json:2.5.0') {
+        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
+    }
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}

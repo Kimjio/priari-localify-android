@@ -1,0 +1,20 @@
+ext {
+    moduleLibraryName = "priari-localify-android"
+    magiskModuleId = "priari_localify"
+    moduleName = "PriariLocalify"
+    moduleAuthor = "Kimjio"
+    moduleDescription = "priari-localify"
+    moduleVersion = "1.0.0"
+    moduleVersionCode = 1
+    moduleUpdateJson = "https://raw.githubusercontent.com/Kimjio/umamusume-localify-android/main/update"
+
+    // Riru
+    /* Minimal supported Riru API version, used in the version check of riru.sh */
+    moduleMinRiruApiVersion = 24
+
+    /* The version name of minimal supported Riru, used in the version check of riru.sh */
+    moduleMinRiruVersionName = "v24.0.0"
+
+    /* Maximum supported Riru API version, used in the version check of riru.sh */
+    moduleRiruApiVersion = 26
+}

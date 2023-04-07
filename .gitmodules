@@ -1,0 +1,18 @@
+[submodule "module/src/main/cpp/Dobby"]
+	path = module/src/main/cpp/Dobby
+	url = https://github.com/jmpews/Dobby.git
+[submodule "module/src/main/cpp/rapidjson"]
+	path = module/src/main/cpp/rapidjson
+	url = https://github.com/Tencent/rapidjson.git
+[submodule "module/src/main/cpp/SQLiteCpp"]
+	path = module/src/main/cpp/SQLiteCpp
+	url = https://github.com/SRombauts/SQLiteCpp.git
+[submodule "module/src/main/cpp/LSPlant"]
+	path = module/src/main/cpp/LSPlant
+	url = https://github.com/LSPosed/LSPlant.git
+[submodule "module/src/main/cpp/hmac_sha256"]
+	path = module/src/main/cpp/hmac_sha256
+	url = https://github.com/h5p9sl/hmac_sha256.git
+[submodule "module/src/main/cpp/httplib"]
+	path = module/src/main/cpp/httplib
+	url = https://github.com/yhirose/cpp-httplib.git
