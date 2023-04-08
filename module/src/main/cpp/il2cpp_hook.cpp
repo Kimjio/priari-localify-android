@@ -254,8 +254,7 @@ void TextMeshPro_Awake_hook(Il2CppObject *thisObj) {
     // Allow overflow for custom font
     reinterpret_cast<void (*)(Il2CppObject *, int)>(il2cpp_class_get_method_from_name(
             thisObj->klass, "set_overflowMode", 1)->methodPointer)(thisObj, 0);
-    reinterpret_cast<decltype(TextMeshPro_Awake_hook) *>(TextMeshPro_Awake_orig)(
-            thisObj);
+    reinterpret_cast<decltype(TextMeshPro_Awake_hook) *>(TextMeshPro_Awake_orig)(thisObj);
 }
 
 void *set_fps_orig = nullptr;
@@ -872,6 +871,124 @@ PriariLocalizationBuilder_UseDefaultLanguage_hook(Il2CppObject *thisObj, Il2CppO
     return thisObj;
 }
 
+void *GraphicSettings_Initilaize_orig = nullptr;
+
+void GraphicSettings_Initilaize_hook(Il2CppObject *thisObj) {
+    reinterpret_cast<decltype(GraphicSettings_Initilaize_hook) *>(GraphicSettings_Initilaize_orig)(
+            thisObj);
+    apply_graphics_quality_hook(thisObj, 0, false);
+}
+
+void *TalkTimingTrack_Setup_orig = nullptr;
+
+void TalkTimingTrack_Setup_hook(Il2CppObject *thisObj) {
+    reinterpret_cast<decltype(TalkTimingTrack_Setup_hook) *>(TalkTimingTrack_Setup_orig)(thisObj);
+    auto clipsField = il2cpp_class_get_field_from_name(thisObj->klass, "talkTimingClips");
+    Il2CppObject *clips;
+    il2cpp_field_get_value(thisObj, clipsField, &clips);
+
+    Il2CppArray *clipsArray;
+    il2cpp_field_get_value(clips, il2cpp_class_get_field_from_name(clips->klass, "_items"),
+                           &clipsArray);
+
+    auto dataField = il2cpp_class_get_field_from_name(thisObj->klass, "talkChoiceMessageDatas");
+    Il2CppObject *data;
+    il2cpp_field_get_value(thisObj, dataField, &data);
+
+    Il2CppArray *dataArray;
+    il2cpp_field_get_value(data, il2cpp_class_get_field_from_name(data->klass, "_items"),
+                           &dataArray);
+
+    for (int i = 0; i < clipsArray->max_length; i++) {
+        auto clipData = reinterpret_cast<Il2CppObject *>(clipsArray->vector[i]);
+        if (clipData) {
+            auto talkField = il2cpp_class_get_field_from_name(clipData->klass, "talkTiming");
+            Il2CppObject *talk;
+            il2cpp_field_get_value(clipData, talkField, &talk);
+            if (talk) {
+                auto charListField = il2cpp_class_get_field_from_name(talk->klass,
+                                                                      "characterAssetDatas");
+                Il2CppObject *charList;
+                il2cpp_field_get_value(talk, charListField, &charList);
+
+                Il2CppArray *charArray;
+                il2cpp_field_get_value(charList,
+                                       il2cpp_class_get_field_from_name(charList->klass, "_items"),
+                                       &charArray);
+
+                for (int j = 0; j < charArray->max_length; j++) {
+                    auto charData = reinterpret_cast<Il2CppObject *>(charArray->vector[j]);
+                    if (charData) {
+                        auto nameField = il2cpp_class_get_field_from_name(charData->klass, "name");
+                        Il2CppString *name;
+                        il2cpp_field_get_value(charData, nameField, &name);
+                        il2cpp_field_set_value(charData, nameField,
+                                               localify::get_localized_string(name));
+                    }
+                }
+
+                auto messageDataField = il2cpp_class_get_field_from_name(talk->klass,
+                                                                         "messageData");
+                Il2CppObject *messageData;
+                il2cpp_field_get_value(talk, messageDataField, &messageData);
+
+                if (messageData) {
+                    auto namesField = il2cpp_class_get_field_from_name(messageData->klass, "names");
+                    Il2CppObject *names;
+                    il2cpp_field_get_value(messageData, namesField, &names);
+
+                    Il2CppArray *nameArray;
+                    il2cpp_field_get_value(names,
+                                           il2cpp_class_get_field_from_name(names->klass, "_items"),
+                                           &nameArray);
+
+                    for (int k = 0; k < nameArray->max_length; k++) {
+                        auto text = reinterpret_cast<Il2CppString *>(nameArray->vector[k]);
+                        if (text) {
+                            il2cpp_array_set(nameArray, Il2CppString*, k,
+                                             localify::get_localized_string(text));
+                        }
+                    }
+
+                    auto messageField = il2cpp_class_get_field_from_name(messageData->klass,
+                                                                         "message");
+                    Il2CppString *message;
+                    il2cpp_field_get_value(messageData, messageField, &message);
+                    il2cpp_field_set_value(messageData, messageField,
+                                           localify::get_localized_string(message));
+
+                    auto messageWaitDataField = il2cpp_class_get_field_from_name(messageData->klass,
+                                                                                 "messageWaitDatas");
+                    Il2CppObject *messageWaitData;
+                    il2cpp_field_get_value(messageData, messageWaitDataField, &messageWaitData);
+
+                    Il2CppArray *messageWaitDataArray;
+                    il2cpp_field_get_value(messageWaitData,
+                                           il2cpp_class_get_field_from_name(messageWaitData->klass,
+                                                                            "_items"),
+                                           &messageWaitDataArray);
+                    for (int k = 0; k < messageWaitDataArray->max_length; k++) {
+                        auto waitData = reinterpret_cast<MessageWaitData *>(messageWaitDataArray->vector[k]);
+                        if (waitData) {
+                            waitData->message = localify::get_localized_string(waitData->message);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < dataArray->max_length; i++) {
+        auto choiceData = reinterpret_cast<Il2CppObject *>(dataArray->vector[i]);
+        if (choiceData) {
+            auto messageField = il2cpp_class_get_field_from_name(choiceData->klass, "message");
+            Il2CppString *message;
+            il2cpp_field_get_value(choiceData, messageField, &message);
+            il2cpp_field_set_value(choiceData, messageField, localify::get_localized_string(message));
+        }
+    }
+}
+
 void init_il2cpp_api() {
 #define DO_API(r, n, ...) n = (r (*) (__VA_ARGS__))dlsym(il2cpp_handle, #n)
 
@@ -963,15 +1080,11 @@ void hookMethods() {
                                                "set_text", 1));
 
     auto TextMeshPro_Awake_addr = il2cpp_symbols::get_method_pointer("Unity.TextMeshPro.dll",
-                                                                     "TMPro",
-                                                                     "TextMeshPro",
+                                                                     "TMPro", "TextMeshPro",
                                                                      "Awake", 0);
 
     auto TMP_Settings_get_instance_addr = il2cpp_symbols::get_method_pointer(
-            "Unity.TextMeshPro.dll",
-            "TMPro",
-            "TMP_Settings",
-            "get_instance", -1);
+            "Unity.TextMeshPro.dll", "TMPro", "TMP_Settings", "get_instance", -1);
 
     auto set_fps_addr = il2cpp_symbols::get_method_pointer("UnityEngine.CoreModule.dll",
                                                            "UnityEngine", "Application",
@@ -998,6 +1111,11 @@ void hookMethods() {
                                                                   "UnityEngine", "Screen",
                                                                   "SetResolution", 3);
 
+    auto GraphicSettings_Initilaize_addr = il2cpp_symbols::get_method_pointer("Assembly-CSharp.dll",
+                                                                              "Priari",
+                                                                              "GraphicSettings",
+                                                                              "Initilaize", 0);
+
     auto apply_graphics_quality_addr = il2cpp_symbols::get_method_pointer("Assembly-CSharp.dll",
                                                                           "Priari",
                                                                           "GraphicSettings",
@@ -1005,22 +1123,23 @@ void hookMethods() {
                                                                           2);
 
     auto CriMana_Player_SetFile_addr = il2cpp_symbols::get_method_pointer(
-            "CriMw.CriWare.Runtime.dll",
-            "CriWare.CriMana", "Player",
-            "SetFile", 3);
+            "CriMw.CriWare.Runtime.dll", "CriWare.CriMana", "Player", "SetFile", 3);
 
     auto PriariLocalizationBuilder_UseDefaultLanguage_addr = il2cpp_symbols::get_method_pointer(
             "Assembly-CSharp.dll", "Priari.ServerShared.Globalization", "PriariLocalizationBuilder",
             "UseDefaultLanguage", 1);
+
+    auto TalkTimingTrack_Setup_addr = il2cpp_symbols::get_method_pointer("Assembly-CSharp.dll",
+                                                                         "Priari.Adv",
+                                                                         "TalkTimingTrack", "Setup",
+                                                                         0);
 
     load_from_file = reinterpret_cast<Il2CppObject *(*)(
             Il2CppString *path)>(il2cpp_symbols::get_method_pointer(
             "UnityEngine.AssetBundleModule.dll", "UnityEngine", "AssetBundle", "LoadFromFile", 1));
 
     auto PathResolver_GetLocalPath_addr = il2cpp_symbols::get_method_pointer(
-            "Cute.AssetBundle.Assembly.dll",
-            "Cute.AssetBundle.LocalFile",
-            "PathResolver",
+            "Cute.AssetBundle.Assembly.dll", "Cute.AssetBundle.LocalFile", "PathResolver",
             "GetLocalPath", 2);
 
     auto assetbundle_unload_addr = il2cpp_symbols::get_method_pointer(
@@ -1050,6 +1169,8 @@ void hookMethods() {
     reinterpret_cast<void (*)(Il2CppObject *, Il2CppObject *)>(il2cpp_symbols::get_method_pointer(
             "Assembly-CSharp.dll", "Priari.ServerShared.Globalization", "PriariLocalization",
             "SetDefaultLanguage", 1))(currentLocalization, korean);
+
+    ADD_HOOK(TalkTimingTrack_Setup)
 
     ADD_HOOK(PriariLocalizationBuilder_UseDefaultLanguage)
 
@@ -1088,11 +1209,13 @@ void hookMethods() {
     }
 
     if (g_graphics_quality != -1) {
+        ADD_HOOK(GraphicSettings_Initilaize)
         ADD_HOOK(apply_graphics_quality)
-        auto graphicSettings = GetSingletonInstance(il2cpp_symbols::get_class("Assembly-CSharp.dll",
-                                                                              "Priari",
-                                                                              "GraphicSettings"));
-        apply_graphics_quality_hook(graphicSettings, 0, false);
+        auto graphicSettings = GetSingletonInstance(
+                il2cpp_symbols::get_class("Assembly-CSharp.dll", "Priari", "GraphicSettings"));
+        if (graphicSettings) {
+            apply_graphics_quality_hook(graphicSettings, 0, false);
+        }
     }
 
     if (g_anti_aliasing != -1) {
@@ -1100,9 +1223,11 @@ void hookMethods() {
     }
 
     auto language = reinterpret_cast<Il2CppObject *(*)(
-            Il2CppObject *)>(il2cpp_symbols::get_method_pointer(
-            "Assembly-CSharp.dll", "Priari.ServerShared.Globalization", "PriariLocalization",
-            "get_DefaultLanguage", 0))(currentLocalization);
+            Il2CppObject *)>(il2cpp_symbols::get_method_pointer("Assembly-CSharp.dll",
+                                                                "Priari.ServerShared.Globalization",
+                                                                "PriariLocalization",
+                                                                "get_DefaultLanguage", 0))(
+            currentLocalization);
     auto displayName = reinterpret_cast<Il2CppString *(*)(
             Il2CppObject *)>(il2cpp_class_get_method_from_name(language->klass, "get_DisplayName",
                                                                0)->methodPointer)(language);
