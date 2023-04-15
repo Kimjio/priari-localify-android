@@ -89,6 +89,8 @@ extern bool g_dump_msgpack;
 extern bool g_dump_msgpack_request;
 extern string g_packet_notifier;
 
+extern string g_configuration_json_url_base;
+
 namespace {
     // copy-pasted from https://stackoverflow.com/questions/3418231/replace-part-of-a-string-with-another-string
     void replaceAll(string &str, const string &from, const string &to) {

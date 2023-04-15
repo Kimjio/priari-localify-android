@@ -29,6 +29,8 @@ bool g_dump_msgpack = false;
 bool g_dump_msgpack_request = false;
 string g_packet_notifier;
 
+string g_configuration_json_url_base;
+
 string text_id_dict;
 
 bool isGame(const char *pkgNm) {
@@ -330,6 +332,13 @@ optional<vector<string>> read_config() {
 
         if (document.HasMember("packetNotifier")) {
             g_packet_notifier = document["packetNotifier"].GetString();
+        }
+
+        if (document.HasMember("configurationJsonUrlBase")) {
+            g_configuration_json_url_base = document["configurationJsonUrlBase"].GetString();
+            if (!g_configuration_json_url_base.ends_with("/")) {
+                g_configuration_json_url_base.append("/");
+            }
         }
     }
 

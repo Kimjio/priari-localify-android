@@ -368,7 +368,7 @@ void *apply_graphics_quality_orig = nullptr;
 void apply_graphics_quality_hook(Il2CppObject *thisObj, int  /*quality*/, bool  /*force*/) {
     LOGD("apply_graphics_quality");
     reinterpret_cast<decltype(apply_graphics_quality_hook) * >
-    (apply_graphics_quality_orig)(thisObj, g_graphics_quality, true);
+    (apply_graphics_quality_orig)(thisObj, g_graphics_quality, false);
 }
 
 void *assetbundle_LoadFromFile_orig = nullptr;
@@ -879,6 +879,46 @@ void GraphicSettings_Initilaize_hook(Il2CppObject *thisObj) {
     apply_graphics_quality_hook(thisObj, 0, false);
 }
 
+void *TitleScene_isInServiceTerm_orig = nullptr;
+
+bool TitleScene_isInServiceTerm_hook(Il2CppObject *thisObj) {
+    LOGD("TitleScene_isInServiceTerm: %d",
+         reinterpret_cast<decltype(TitleScene_isInServiceTerm_hook) *>(TitleScene_isInServiceTerm_orig)(
+                 thisObj));
+    return true;
+}
+
+void *ResourceManager_Initialize_orig = nullptr;
+
+void ResourceManager_Initialize_hook(Il2CppObject *thisObj) {
+    reinterpret_cast<decltype(ResourceManager_Initialize_hook) *>(ResourceManager_Initialize_orig)(
+            thisObj);
+    auto leaderTalkTableCacheField = il2cpp_class_get_field_from_name(thisObj->klass,
+                                                                      "leaderTalkTableCache");
+    Il2CppObject *leaderTalkTableCache;
+    il2cpp_field_get_value(thisObj, leaderTalkTableCacheField, &leaderTalkTableCache);
+
+
+    auto talkDataListField = il2cpp_class_get_field_from_name(thisObj->klass, "talkDataList");
+    Il2CppObject *talkDataList;
+    il2cpp_field_get_value(thisObj, talkDataListField, &talkDataList);
+
+    Il2CppArray *talkDataListArray;
+    il2cpp_field_get_value(talkDataList,
+                           il2cpp_class_get_field_from_name(talkDataList->klass, "_items"),
+                           &talkDataListArray);
+
+    for (int j = 0; j < talkDataListArray->max_length; j++) {
+        auto talkData = reinterpret_cast<Il2CppObject *>(talkDataListArray->vector[j]);
+        if (talkData) {
+            auto messageField = il2cpp_class_get_field_from_name(talkData->klass, "message");
+            Il2CppString *message;
+            il2cpp_field_get_value(talkData, messageField, &message);
+            il2cpp_field_set_value(talkData, messageField, localify::get_localized_string(message));
+        }
+    }
+}
+
 void *TalkTimingTrack_Setup_orig = nullptr;
 
 void TalkTimingTrack_Setup_hook(Il2CppObject *thisObj) {
@@ -957,6 +997,14 @@ void TalkTimingTrack_Setup_hook(Il2CppObject *thisObj) {
                     il2cpp_field_set_value(messageData, messageField,
                                            localify::get_localized_string(message));
 
+                    auto overrideTalkerNameField = il2cpp_class_get_field_from_name(
+                            messageData->klass, "overrideTalkerName");
+                    Il2CppString *overrideTalkerName;
+                    il2cpp_field_get_value(messageData, overrideTalkerNameField,
+                                           &overrideTalkerName);
+                    il2cpp_field_set_value(messageData, overrideTalkerNameField,
+                                           localify::get_localized_string(overrideTalkerName));
+
                     auto messageWaitDataField = il2cpp_class_get_field_from_name(messageData->klass,
                                                                                  "messageWaitDatas");
                     Il2CppObject *messageWaitData;
@@ -984,9 +1032,77 @@ void TalkTimingTrack_Setup_hook(Il2CppObject *thisObj) {
             auto messageField = il2cpp_class_get_field_from_name(choiceData->klass, "message");
             Il2CppString *message;
             il2cpp_field_get_value(choiceData, messageField, &message);
-            il2cpp_field_set_value(choiceData, messageField, localify::get_localized_string(message));
+            il2cpp_field_set_value(choiceData, messageField,
+                                   localify::get_localized_string(message));
         }
     }
+}
+
+void *TimeUtility_IsTermTime_orig = nullptr;
+
+bool TimeUtility_IsTermTime_hook(Il2CppString *startDate, Il2CppString *endDate, long checkTime) {
+    LOGD("TimeUtility_IsTermTime %d",
+         reinterpret_cast<decltype(TimeUtility_IsTermTime_hook) *>(TimeUtility_IsTermTime_orig)(
+                 startDate, endDate, checkTime));
+    return true;
+}
+
+void *SystemDefines_get_ConfigurationJsonUrlBase_orig = nullptr;
+
+Il2CppString *SystemDefines_get_ConfigurationJsonUrlBase_hook() {
+    return il2cpp_string_new(g_configuration_json_url_base.data());
+}
+
+void *SystemDefines_get_Language_orig = nullptr;
+
+Il2CppString *SystemDefines_get_Language_hook() {
+    return il2cpp_string_new("Kor");
+}
+
+void *SystemDefines_get_MaintenanceJsonUrl_orig = nullptr;
+
+Il2CppString *SystemDefines_get_MaintenanceJsonUrl_hook() {
+    return il2cpp_string_new(
+            (localify::u16_u8(SystemDefines_get_ConfigurationJsonUrlBase_hook()->start_char) +
+             "maintenance-status.json"s).data());
+}
+
+void *SystemDefines_get_ClientVersionJsonUrl_orig = nullptr;
+
+Il2CppString *SystemDefines_get_ClientVersionJsonUrl_hook() {
+    return il2cpp_string_new(
+            (localify::u16_u8(SystemDefines_get_ConfigurationJsonUrlBase_hook()->start_char) +
+             "client-version.json"s).data());
+}
+
+void *SystemDefines_get_AssetResourceJsonUrl_orig = nullptr;
+
+Il2CppString *SystemDefines_get_AssetResourceJsonUrl_hook() {
+    return il2cpp_string_new(
+            (localify::u16_u8(SystemDefines_get_ConfigurationJsonUrlBase_hook()->start_char) +
+             "asset-resource.json"s).data());
+}
+
+void *SystemDefines_get_ServerEndpointJsonUrl_orig = nullptr;
+
+Il2CppString *SystemDefines_get_ServerEndpointJsonUrl_hook() {
+    return il2cpp_string_new(
+            (localify::u16_u8(SystemDefines_get_ConfigurationJsonUrlBase_hook()->start_char) +
+             "server-endpoint.json"s).data());
+}
+
+void *ClientServerConfiguration_TryUpdateAssetResourceVersionAsync_orig = nullptr;
+
+Il2CppObject *ClientServerConfiguration_TryUpdateAssetResourceVersionAsync_hook(Il2CppObject* thisObj) {
+    LOGD("ClientServerConfiguration_TryUpdateAssetResourceVersionAsync");
+    return reinterpret_cast<Il2CppObject *(*)(Il2CppObject*)>(il2cpp_class_get_method_from_name(thisObj->klass, "TryUpdateServerEndpointAsync", 0)->methodPointer)(thisObj);
+}
+
+void *ManifestChecker_StartDownload_orig = nullptr;
+
+void ManifestChecker_StartDownload_hook(Il2CppObject* thisObj, Il2CppDelegate *onManifestChecked, Il2CppDelegate onCancel, bool isBackGroundDownloadWindow) {
+    LOGD("ManifestChecker_StartDownload");
+    reinterpret_cast<void (*)(Il2CppObject *, bool)>(onManifestChecked->method_ptr)(onManifestChecked->target, true);
 }
 
 void init_il2cpp_api() {
@@ -1129,10 +1245,50 @@ void hookMethods() {
             "Assembly-CSharp.dll", "Priari.ServerShared.Globalization", "PriariLocalizationBuilder",
             "UseDefaultLanguage", 1);
 
+    auto TitleScene_isInServiceTerm_addr = il2cpp_symbols::get_method_pointer("Assembly-CSharp.dll",
+                                                                              "Priari.Title",
+                                                                              "TitleScene",
+                                                                              "isInServiceTerm", 0);
+
+    auto ResourceManager_Initialize_addr = il2cpp_symbols::get_method_pointer("Assembly-CSharp.dll",
+                                                                              "Priari",
+                                                                              "ResourceManager",
+                                                                              "Initialize", 0);
+
     auto TalkTimingTrack_Setup_addr = il2cpp_symbols::get_method_pointer("Assembly-CSharp.dll",
                                                                          "Priari.Adv",
                                                                          "TalkTimingTrack", "Setup",
                                                                          0);
+
+    auto TimeUtility_IsTermTime_addr = il2cpp_symbols::get_method_pointer("Assembly-CSharp.dll",
+                                                                          "Priari", "TimeUtility",
+                                                                          "IsTermTime", 3);
+
+    auto SystemDefines_get_ConfigurationJsonUrlBase_addr = il2cpp_symbols::get_method_pointer(
+            "Assembly-CSharp.dll", "Priari", "SystemDefines", "get_ConfigurationJsonUrlBase", -1);
+
+    auto SystemDefines_get_Language_addr = il2cpp_symbols::get_method_pointer("Assembly-CSharp.dll",
+                                                                              "Priari",
+                                                                              "SystemDefines",
+                                                                              "get_Language", -1);
+
+    auto SystemDefines_get_MaintenanceJsonUrl_addr = il2cpp_symbols::get_method_pointer(
+            "Assembly-CSharp.dll", "Priari", "SystemDefines", "get_MaintenanceJsonUrl", -1);
+
+    auto SystemDefines_get_ClientVersionJsonUrl_addr = il2cpp_symbols::get_method_pointer(
+            "Assembly-CSharp.dll", "Priari", "SystemDefines", "get_ClientVersionJsonUrl", -1);
+
+    auto SystemDefines_get_AssetResourceJsonUrl_addr = il2cpp_symbols::get_method_pointer(
+            "Assembly-CSharp.dll", "Priari", "SystemDefines", "get_AssetResourceJsonUrl", -1);
+
+    auto SystemDefines_get_ServerEndpointJsonUrl_addr = il2cpp_symbols::get_method_pointer(
+            "Assembly-CSharp.dll", "Priari", "SystemDefines", "get_ServerEndpointJsonUrl", -1);
+
+    auto ClientServerConfiguration_TryUpdateAssetResourceVersionAsync_addr = il2cpp_symbols::get_method_pointer(
+            "Assembly-CSharp.dll", "Priari.Configuration", "ClientServerConfiguration", "TryUpdateAssetResourceVersionAsync", 0);
+
+    auto ManifestChecker_StartDownload_addr = il2cpp_symbols::get_method_pointer(
+            "Assembly-CSharp.dll", "Priari", "ManifestChecker", "StartDownload", 3);
 
     load_from_file = reinterpret_cast<Il2CppObject *(*)(
             Il2CppString *path)>(il2cpp_symbols::get_method_pointer(
@@ -1169,6 +1325,26 @@ void hookMethods() {
     reinterpret_cast<void (*)(Il2CppObject *, Il2CppObject *)>(il2cpp_symbols::get_method_pointer(
             "Assembly-CSharp.dll", "Priari.ServerShared.Globalization", "PriariLocalization",
             "SetDefaultLanguage", 1))(currentLocalization, korean);
+
+    // ADD_HOOK(ClientServerConfiguration_TryUpdateAssetResourceVersionAsync)
+
+    ADD_HOOK(ManifestChecker_StartDownload)
+
+    ADD_HOOK(SystemDefines_get_Language)
+
+    if (!g_configuration_json_url_base.empty()) {
+        ADD_HOOK(SystemDefines_get_ServerEndpointJsonUrl)
+        ADD_HOOK(SystemDefines_get_AssetResourceJsonUrl)
+        ADD_HOOK(SystemDefines_get_ClientVersionJsonUrl)
+        ADD_HOOK(SystemDefines_get_MaintenanceJsonUrl)
+        ADD_HOOK(SystemDefines_get_ConfigurationJsonUrlBase)
+    }
+
+    ADD_HOOK(TimeUtility_IsTermTime)
+
+    ADD_HOOK(TitleScene_isInServiceTerm)
+
+    ADD_HOOK(ResourceManager_Initialize)
 
     ADD_HOOK(TalkTimingTrack_Setup)
 
