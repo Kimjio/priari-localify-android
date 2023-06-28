@@ -13,6 +13,7 @@ namespace Game {
     enum class Region {
         UNKNOWN,
         JAP,
+        KOR,
     };
 
     enum class Store {
@@ -23,6 +24,7 @@ namespace Game {
     inline auto currentGameStore = Store::Google;
 
     inline auto GamePackageName = "jp.co.cygames.priconnegrandmasters"s;
+    inline auto GamePackageNameKor = "com.kakaogames.pcrgm"s;
 
     static bool IsPackageNameEqualsByGameRegion(const char *pkgNm, Region gameRegion) {
         string pkgNmStr = string(pkgNm);
@@ -37,6 +39,13 @@ namespace Game {
                     return true;
                 }
                 break;
+            case Region::KOR:
+                if (pkgNmStr == GamePackageNameKor) {
+                    currentGameRegion = Region::KOR;
+                    currentGameStore = Store::Google;
+                    return true;
+                }
+                break;
             case Region::UNKNOWN:
             default:
                 break;
@@ -47,6 +56,8 @@ namespace Game {
     static string GetPackageNameByGameRegionAndGameStore(Region gameRegion, Store gameStore) {
         if (gameRegion == Region::JAP)
             return GamePackageName;
+        if (gameRegion == Region::KOR)
+            return GamePackageNameKor;
         return "";
     }
 
@@ -62,6 +73,14 @@ namespace Game {
                         "/cache").data(),
                 F_OK) == 0) {
             return Region::JAP;
+        }
+        if (access(
+                "/data/data/"s
+                        .append(GetPackageNameByGameRegionAndGameStore(Region::KOR,
+                                                                       Store::Google)).append(
+                        "/cache").data(),
+                F_OK) == 0) {
+            return Region::KOR;
         }
 
         return Region::UNKNOWN;

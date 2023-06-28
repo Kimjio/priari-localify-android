@@ -1050,6 +1050,7 @@ bool TimeUtility_IsTermTime_hook(Il2CppString *startDate, Il2CppString *endDate,
 void *SystemDefines_get_ConfigurationJsonUrlBase_orig = nullptr;
 
 Il2CppString *SystemDefines_get_ConfigurationJsonUrlBase_hook() {
+    LOGD("Orig url: %s", localify::u16_u8(reinterpret_cast<decltype(SystemDefines_get_ConfigurationJsonUrlBase_hook)*>(SystemDefines_get_ConfigurationJsonUrlBase_orig)()->start_char).data());
     return il2cpp_string_new(g_configuration_json_url_base.data());
 }
 
@@ -1328,7 +1329,7 @@ void hookMethods() {
 
     // ADD_HOOK(ClientServerConfiguration_TryUpdateAssetResourceVersionAsync)
 
-    ADD_HOOK(ManifestChecker_StartDownload)
+    // ADD_HOOK(ManifestChecker_StartDownload)
 
     ADD_HOOK(SystemDefines_get_Language)
 

@@ -36,7 +36,8 @@ string text_id_dict;
 bool isGame(const char *pkgNm) {
     if (!pkgNm)
         return false;
-    if (Game::IsPackageNameEqualsByGameRegion(pkgNm, Game::Region::JAP)) {
+    if (Game::IsPackageNameEqualsByGameRegion(pkgNm, Game::Region::JAP) ||
+        Game::IsPackageNameEqualsByGameRegion(pkgNm, Game::Region::KOR)) {
         LOGI("detect package: %s", pkgNm);
         return true;
     }
